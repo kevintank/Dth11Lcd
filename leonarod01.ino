@@ -1,45 +1,47 @@
-#include <Mouse.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+#include <DHT11.h>
 
-#define LED 3
-#define ANALOG A0
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+#define DHTPIN            9
+DHT11 dht11(DHTPIN); 
 
-int nA0_Value = 0;
-const int xAxis = A0;
-const int yAxis = A1;
-void setup() {
-  // put your setup code here, to run once:
-pinMode(LED, OUTPUT);
-Serial.begin(9600);
-Mouse.begin();
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-nA0_Value = analogRead(ANALOG);
-analogWrite(LED, nA0_Value /4);
-
-Serial.println(nA0_Value);
-
- int x = readAxis(xAxis);
- int y = readAxis(yAxis);
- Serial.print(x);
-
- Mouse.move(x, 0, 0);
-  
-delay(10);
-}
-
-int readAxis(int thisAxis)
+void setup()
 {
-  int reading = analogRead(thisAxis);
- 
-  reading = map(reading, 0, 1023, 0, 12);
- 
-  int distance = reading - 6;
- 
-  if (abs(distance) < 2) {
-    distance = 0;
-  }
-  return distance;
+  Serial.begin(9600);
+  // initialize the LCD
+  lcd.begin();
 }
-            
+
+void loop()
+{
+    int err;
+  float temp, humi;
+  if((err=dht11.read(humi, temp))==0)
+  {
+    lcd.backlight();
+    lcd.display();
+    lcd.print("TEMP:     ");
+    lcd.print(temp);
+    lcd.setCursor(0,1);
+    lcd.print("HUMIDITY: ");
+    lcd.print(humi);
+ 
+    Serial.print("temp: ");
+    Serial.print(temp);
+    Serial.print("humi: ");
+    Serial.print(humi);
+    Serial.println();
+  }
+  else
+  {
+    lcd.backlight();
+    lcd.display();
+    lcd.print("ERROR NO.: ");
+    lcd.print(err);
+  }
+  delay(10000); //10초마다 Refresh
+  lcd.clear();
+ 
+}
