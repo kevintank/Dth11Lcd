@@ -19,7 +19,7 @@ void setup()
 {
   Serial.begin(9600);
   // initialize the LCD
-//  lcd.begin();
+  lcd.begin();
 }
 
 void loop()
