@@ -2,6 +2,14 @@
 #include <LiquidCrystal_I2C.h>
 #include <DHT11.h>
 
+
+// 테스트 사용 안함 삭제 예정
+//DTH11 참고
+//http://www.hardcopyworld.com/ngine/aduino/index.php/archives/190  
+
+//I2C LCD 제어하기
+//https://kocoafab.cc/tutorial/view/689
+ 
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define DHTPIN            9
@@ -11,7 +19,7 @@ void setup()
 {
   Serial.begin(9600);
   // initialize the LCD
-  lcd.begin();
+//  lcd.begin();
 }
 
 void loop()
